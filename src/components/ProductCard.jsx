@@ -33,7 +33,7 @@ export default function ProductsCard({ product }) {
     return (
         <div className="group relative">
             <Link
-                href={`/product/${productId}`}
+                href={`/shop/${productId}`}
                 className="block relative w-full overflow-hidden h-48 sm:h-80 md:h-96"
             >
                 <Image

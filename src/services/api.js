@@ -25,16 +25,21 @@ api.interceptors.request.use(
 
 export async function productsData() {
     try {
-        const [resp1, resp2, resp3] = await Promise.all([
-            api.get('/products'),
-            api.get('/nextamazon'),
-            api.get('/amazonproducts'),
-        ]);
-        return [
-            ...resp1.data,
-            ...resp2.data,
-            ...resp3.data,
-        ];
+        const endpoints = ['/products', '/nextamazon', '/amazonproducts'];
+
+        const responses = await Promise.all(
+            endpoints.map((url) => api.get(url))
+        );
+
+        const allItems = responses.flatMap((resp) => resp.data);
+
+        const unified = allItems.map((item, index) => ({
+            ...item,
+            originalId: item.id ?? item._id,
+            id: index + 1,
+        }));
+
+        return unified;
     } catch (error) {
         console.error('Error fetching productsData:', error);
         throw error;
